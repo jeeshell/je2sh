@@ -1,0 +1,38 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.2.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    }
+}
+
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'org.springframework.boot'
+
+dependencyManagement {
+    imports {
+        mavenBom 'io.spring.platform:platform-bom:Brussels-SR1'
+    }
+}
+
+dependencies {
+    compile project(':ssh')
+    compile 'org.springframework.boot:spring-boot-autoconfigure'
+    compile group: 'org.springframework', name: 'spring-webmvc'
+
+
+    compileOnly group: 'org.springframework.security', name: 'spring-security-config'
+    compileOnly group: 'org.springframework.security', name: 'spring-security-web'
+    compileOnly group: 'javax.servlet', name: 'javax.servlet-api', version: '3.0.1'
+
+    compileOnly group: 'org.projectlombok', name: 'lombok'
+}
+
+bootRepackage {
+    enabled = false
+}

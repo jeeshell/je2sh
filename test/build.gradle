@@ -1,0 +1,6 @@
+dependencies {
+    compile project(':core')
+    compile group: 'cglib', name: 'cglib-nodep', version: '3.2.5'
+    compile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+
+}

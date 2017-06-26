@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+net.jeesh.spring.JeeshSshAutoConfiguration,\
+net.jeesh.spring.JeeshRestAutoConfiguration

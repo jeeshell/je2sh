@@ -1,0 +1,12 @@
+apply plugin: 'application'
+//apply plugin: 'kotlin-kapt'
+
+dependencies {
+    compile project(':core')
+
+    runtime project(':base-plugins')
+
+//    kapt 'com.squareup:javapoet:1.9.0'
+}
+
+mainClassName = 'net.jeesh.core.Main'

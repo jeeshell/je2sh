@@ -1,0 +1,9 @@
+jeesh:
+  ssh:
+    enabled: true
+    port: 2002
+    ip: 127.0.0.1
+  rest:
+    enabled: true
+    root-protection: true
+    command-protection: true
