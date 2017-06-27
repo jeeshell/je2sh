@@ -1,6 +1,7 @@
 description 'JVM Extensible Embeddable SHell'
 
 apply plugin: 'java'
+apply plugin: 'net.researchgate.release'
 
 sourceCompatibility = 1.8
 
@@ -11,6 +12,8 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'net.researchgate:gradle-release:2.4.0'
+
     }
 }
 
