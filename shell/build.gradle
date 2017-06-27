@@ -9,4 +9,4 @@ dependencies {
 //    kapt 'com.squareup:javapoet:1.9.0'
 }
 
-mainClassName = 'net.jeesh.core.Main'
+mainClassName = 'net.je2sh.core.Main'

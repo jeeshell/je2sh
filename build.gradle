@@ -1,4 +1,4 @@
-group 'net.jeesh'
+group 'net.je2sh'
 version '1.0.0-SNAPSHOT'
 description 'JVM Extensible Embeddable SHell'
 

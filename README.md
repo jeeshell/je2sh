@@ -54,7 +54,7 @@ public class Hello extends AbstractCommand {
 
 The requirements:
 * Annotate your command with `@Parameters`
-* Implement `net.jeesh.core.Command`. You will typically extend `net.jeesh.core.AbstractCommand` for convenience.
+* Implement `Command`. You will typically extend `net.je2sh.core.AbstractCommand` for convenience.
 
 
 # Architecture
