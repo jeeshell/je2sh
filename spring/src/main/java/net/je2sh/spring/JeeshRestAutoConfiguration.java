@@ -43,15 +43,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @Configuration
 @AutoConfigureAfter(WebMvcAutoConfiguration.class)
 @ConditionalOnWebApplication
-@ConditionalOnClass(SecurityContextHolder.class)
 @EnableConfigurationProperties(JeeshRestOptions.class)
 @ComponentScan("net.je2sh.spring.rest")
 @Order(Ordered.LOWEST_PRECEDENCE)
-public class JeeshRestAutoConfiguration extends WebSecurityConfigurerAdapter {
+public class JeeshRestAutoConfiguration {
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().ignoringAntMatchers("/jeesh/**");
+    @Configuration
+    @ConditionalOnClass(SecurityContextHolder.class)
+    public static class SecurityConfig extends WebSecurityConfigurerAdapter {
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http.csrf().ignoringAntMatchers("/jeesh/**");
+        }
     }
 
 }
