@@ -51,11 +51,11 @@ configure(subprojects.findAll {
         archives javadocJar, sourcesJar
     }
 
-    signing {
-        sign configurations.archives
-    }
-
     if (project.hasProperty('ossrhUsername')) {
+        signing {
+            sign configurations.archives
+        }
+
         uploadArchives {
             repositories {
                 mavenDeployer {
