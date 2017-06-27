@@ -46,7 +46,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @ConditionalOnClass(SecurityContextHolder.class)
 @EnableConfigurationProperties(JeeshRestOptions.class)
 @ComponentScan("net.je2sh.spring.rest")
-@Order(Ordered.HIGHEST_PRECEDENCE)
+@Order(Ordered.LOWEST_PRECEDENCE)
 public class JeeshRestAutoConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
