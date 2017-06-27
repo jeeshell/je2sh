@@ -1,5 +1,3 @@
-group 'net.je2sh'
-version '1.0.0-SNAPSHOT'
 description 'JVM Extensible Embeddable SHell'
 
 apply plugin: 'java'
@@ -33,6 +31,75 @@ subprojects {
     }
 }
 
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+configure(subprojects.findAll {
+    it.name in ['core', 'annotations', 'base-plugins', 'ssh', 'shell', 'spring']
+}) {
+    apply plugin: 'maven'
+    apply plugin: 'signing'
+
+    task javadocJar(type: Jar) {
+        classifier = 'javadoc'
+        from javadoc
+    }
+
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    artifacts {
+        archives javadocJar, sourcesJar
+    }
+
+    signing {
+        sign configurations.archives
+    }
+
+    if (project.hasProperty('ossrhUsername')) {
+        uploadArchives {
+            repositories {
+                mavenDeployer {
+                    beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+                    repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                        authentication(userName: ossrhUsername, password: ossrhPassword)
+                    }
+
+                    snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                        authentication(userName: ossrhUsername, password: ossrhPassword)
+                    }
+
+                    pom.project {
+                        name 'JVM Extensible & Embeddable SHell'
+                        packaging 'jar'
+                        // optionally artifactId can be defined here
+                        description 'Reboot of the CRaSH project'
+                        url 'https://jeeshell.github.io/je2sh/'
+
+                        scm {
+                            connection 'scm:https://github.com/jeeshell/je2sh.git'
+                            developerConnection 'scm:https://github.com/jeeshell/je2sh.git'
+                            url 'git@github.com:jeeshell/je2sh.git'
+                        }
+
+                        licenses {
+                            license {
+                                name 'MIT License'
+                                url 'https://github.com/jeeshell/je2sh/blob/master/LICENSE.md'
+                            }
+                        }
+
+                        developers {
+                            developer {
+                                id 'hartimer'
+                                name 'Joao Peixoto'
+                                email 'joao.hartimer@gmail.com'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }
