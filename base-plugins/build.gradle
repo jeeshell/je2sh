@@ -1,10 +1,5 @@
-apply plugin: 'groovy'
-
 dependencies {
     compileOnly project(':core')
     compileOnly project(':annotations')
-
-    testCompile project(':test')
-    testCompile group: 'org.spockframework', name: 'spock-core', version: '1.1-groovy-2.4'
 
 }

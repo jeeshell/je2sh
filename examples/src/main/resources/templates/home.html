@@ -28,9 +28,6 @@
     <title>Jeesh Web-base Terminal Demo</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-    <meta th:name="_csrf" th:content="${_csrf.token}"/>
-    <meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/1.4.3/js/jquery.terminal.min.js"></script>
     <script src="js/unix_formatting.js"></script>
@@ -41,10 +38,5 @@
 </head>
 <body>
 <div id="term_demo"></div>
-<form style="display: none">
-    <input type="hidden" id="csrftoken"
-           name="${_csrf.parameterName}"
-           value="${_csrf.token}"/>
-</form>
 </body>
 </html>

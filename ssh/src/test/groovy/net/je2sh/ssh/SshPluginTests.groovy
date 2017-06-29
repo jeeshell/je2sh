@@ -32,7 +32,6 @@ import net.je2sh.test.TestUtils
 import org.apache.commons.io.IOUtils
 import spock.lang.Shared
 import spock.lang.Specification
-import spock.lang.Unroll
 
 @Slf4j
 class SshPluginTests extends Specification {
@@ -76,10 +75,9 @@ class SshPluginTests extends Specification {
         session.disconnect()
     }
 
-    @Unroll
-    def 'Running "#inputStr" should produce "#outputStr"'() {
+    def 'Running "help" command should succeed'() {
         when:
-        channel.command = inputStr
+        channel.command = 'help'
         channel.inputStream = null
         channel.connect()
 
@@ -88,13 +86,7 @@ class SshPluginTests extends Specification {
         channel.disconnect()
 
         then:
-        lines[0] == outputStr
-
-        where:
-        inputStr           | outputStr
-        'hello'            | 'Hello World'
-        'hi -n test'       | 'Hello test'
-        'echo from a test' | 'from a test'
+        lines[0].contains('List of available commands.')
     }
 
 }

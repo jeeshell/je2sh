@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.je2sh.base
+package net.je2sh.examples.commands
 
 import static net.je2sh.test.TestUtils.mockitoAssert
 import static org.mockito.Matchers.eq

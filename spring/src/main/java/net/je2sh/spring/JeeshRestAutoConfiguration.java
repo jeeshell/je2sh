@@ -32,7 +32,6 @@ import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -45,11 +44,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @ConditionalOnWebApplication
 @EnableConfigurationProperties(JeeshRestOptions.class)
 @ComponentScan("net.je2sh.spring.rest")
-@Order(Ordered.LOWEST_PRECEDENCE)
 public class JeeshRestAutoConfiguration {
 
     @Configuration
     @ConditionalOnClass(SecurityContextHolder.class)
+    @Order(1001)
     public static class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
