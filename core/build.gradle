@@ -1,12 +1,12 @@
 apply plugin: 'groovy'
 
 dependencies {
-    compile group: 'org.jline', name: 'jline', version: '3.3.0'
+    compile group: 'org.jline', name: 'jline', version: '3.3.1'
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
     compile group: 'com.beust', name: 'jcommander', version: '1.69'
-
     compile group: 'com.google.auto.service', name: 'auto-service', version: '1.0-rc3'
     compile 'com.squareup:javapoet:1.9.0'
+    compile 'net.je2sh:asciitable:1.0.0'
 
     testCompile group: 'org.spockframework', name: 'spock-core', version: '1.1-groovy-2.4'
 

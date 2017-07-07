@@ -24,15 +24,23 @@
 
 package net.je2sh.base;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import com.beust.jcommander.Parameters;
+import net.je2sh.asciitable.AnsiContentParser;
+import net.je2sh.asciitable.JTable;
+import net.je2sh.asciitable.style.JPadding;
+import net.je2sh.asciitable.style.JTheme;
 import net.je2sh.core.AbstractCommand;
 import net.je2sh.core.Command;
 import net.je2sh.core.CommandContext;
+import org.fusesource.jansi.Ansi;
 import org.jetbrains.annotations.NotNull;
 import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
@@ -52,25 +60,52 @@ public class Help extends AbstractCommand {
                         .style(AttributedStyle.BOLD.foreground(AttributedStyle.RED))
                         .append("<command> -h");
 
-        context.getTerminal().writer().println(headerBuilder.toAnsi(context.getTerminal()));
+        context.println(headerBuilder.toAnsi(context.getTerminal()));
 
         Map<String, Class<? extends Command>> commandMap =
                 context.getPluginContext().getCommandManager().getCommands();
 
-        List<String> commands = new ArrayList<>(commandMap.keySet());
-        commands.sort(String::compareTo);
+        AnsiContentParser ansiContentParser = new AnsiContentParser();
 
-        for (String command : commands) {
-            AttributedStringBuilder builder =
-                    new AttributedStringBuilder()
-                            .append("\t")
-                            .style(AttributedStyle.BOLD.foreground(AttributedStyle.RED))
-                            .append(command)
-                            .append("\t\t")
-                            .style(AttributedStyle.DEFAULT.foregroundDefault())
-                            .append(getDescription(commandMap.get(command)));
-            context.getTerminal().writer().println(builder.toAnsi(context.getTerminal()));
+        JTable table = JTable.of()
+                             .width(60)
+                             .contentParser(ansiContentParser)
+                             .theme(JTheme.NO_LINE);
+
+        Map<String, String> helpMap = new TreeMap<>();
+        int maxCommandLength = 1;
+
+        for (Class<? extends Command> command : commandMap.values()) {
+            String cmds = getCommandNames(command).stream()
+                                                  .map(s -> Ansi.ansi().fgRed().bold().a(s).reset()
+                                                                .toString())
+                                                  .collect(Collectors.joining(", "));
+
+            helpMap.put(cmds, getDescription(command));
+            maxCommandLength = Math.max(maxCommandLength, ansiContentParser.getLength(cmds));
         }
+
+        for (Map.Entry<String, String> entry : helpMap.entrySet()) {
+            table.row()
+                 .col().width(maxCommandLength + 6)
+                 .padding(new JPadding(5, 0, 0, 0, ' '))
+                 .content(Ansi.ansi().fgRed().bold().a(entry.getKey()).reset())
+                 .done()
+                 .col().content(entry.getValue());
+        }
+
+        table.render().forEach(context::println);
+    }
+
+    private static <T extends Command> List<String> getCommandNames(Class<T> tClass) {
+        Parameters paramAnn = tClass.getAnnotation(Parameters.class);
+        if (paramAnn.commandNames().length == 0) {
+            String simpleName = tClass.getClass().getSimpleName();
+            simpleName = Character.toLowerCase(simpleName.charAt(0)) +
+                         simpleName.substring(1, simpleName.length());
+            return Collections.singletonList(simpleName);
+        }
+        return Arrays.asList(paramAnn.commandNames());
     }
 
     private static <T extends Command> String getDescription(Class<T> tClass) {

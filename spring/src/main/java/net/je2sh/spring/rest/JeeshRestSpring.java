@@ -26,13 +26,14 @@ package net.je2sh.spring.rest;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.je2sh.core.CommandContext;
 import net.je2sh.core.plugins.PluginContext;
 import org.jline.terminal.Terminal;
-import org.jline.terminal.TerminalBuilder;
+import org.jline.terminal.impl.ExternalTerminal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -62,10 +63,10 @@ public class JeeshRestSpring extends PluginContext implements ApplicationContext
         log.trace("Received request: {}", commandRequest);
         ByteArrayOutputStream resultOutputStream = new ByteArrayOutputStream();
 
-        Terminal cmdTerminal = TerminalBuilder.builder()
-                                              .streams(System.in, resultOutputStream)
-                                              .system(false)
-                                              .build();
+        Terminal cmdTerminal = new ExternalTerminal("Je2sh Terminal", "TERM",
+                                                    System.in, resultOutputStream,
+                                                    StandardCharsets.UTF_8.name(),
+                                                    Terminal.SignalHandler.SIG_DFL);
 
         List<String> args;
         if (commandRequest.getParams() == null) {
@@ -79,10 +80,10 @@ public class JeeshRestSpring extends PluginContext implements ApplicationContext
         getCommandManager().runCommand(commandRequest.getMethod(),
                                        new CommandContext(this, cmdTerminal),
                                        args.toArray(new String[args.size()]));
-
         cmdTerminal.writer().flush();
         return new CommandResponse(commandRequest.getId(),
-                                   resultOutputStream.toString("UTF-8"), null);
+                                   resultOutputStream.toString(StandardCharsets.UTF_8.name()),
+                                   null);
     }
 
     @Override
