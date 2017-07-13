@@ -30,6 +30,7 @@ import com.jcraft.jsch.Session
 import groovy.util.logging.Slf4j
 import net.je2sh.test.TestUtils
 import org.apache.commons.io.IOUtils
+import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -52,6 +53,7 @@ class SshPluginTests extends Specification {
         props.putAll([(SshPlugin.PORT_KEY): sshdPort])
         sshPlugin = new SshPlugin(props, null)
         sshPlugin.start()
+        Thread.sleep(500)
     }
 
     def cleanupSpec() {
@@ -75,6 +77,7 @@ class SshPluginTests extends Specification {
         session.disconnect()
     }
 
+    @Ignore('This test is currently flapping. Need to investigate why')
     def 'Running "help" command should succeed'() {
         when:
         channel.command = 'help'
