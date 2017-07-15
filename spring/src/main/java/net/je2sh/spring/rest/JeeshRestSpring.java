@@ -33,10 +33,10 @@ import java.util.List;
 import net.je2sh.core.CommandContext;
 import net.je2sh.core.plugins.PluginContext;
 import org.jline.terminal.Terminal;
-import org.jline.terminal.impl.ExternalTerminal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -53,6 +53,9 @@ public class JeeshRestSpring extends PluginContext implements ApplicationContext
 
     private static final Logger log = LoggerFactory.getLogger(JeeshRestSpring.class);
 
+    @Autowired
+    private RestTerminalProvider restTerminalProvider;
+
     public JeeshRestSpring() throws IOException {
     }
 
@@ -63,10 +66,7 @@ public class JeeshRestSpring extends PluginContext implements ApplicationContext
         log.trace("Received request: {}", commandRequest);
         ByteArrayOutputStream resultOutputStream = new ByteArrayOutputStream();
 
-        Terminal cmdTerminal = new ExternalTerminal("Je2sh Terminal", "TERM",
-                                                    System.in, resultOutputStream,
-                                                    StandardCharsets.UTF_8.name(),
-                                                    Terminal.SignalHandler.SIG_DFL);
+        Terminal cmdTerminal = restTerminalProvider.getTerminal(System.in, resultOutputStream);
 
         List<String> args;
         if (commandRequest.getParams() == null) {

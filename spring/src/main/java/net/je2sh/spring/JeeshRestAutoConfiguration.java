@@ -24,12 +24,21 @@
 
 package net.je2sh.spring;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+
 import net.je2sh.spring.rest.JeeshRestOptions;
+import net.je2sh.spring.rest.RestTerminalProvider;
+import org.jline.terminal.Terminal;
+import org.jline.terminal.impl.ExternalTerminal;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -54,6 +63,16 @@ public class JeeshRestAutoConfiguration {
         protected void configure(HttpSecurity http) throws Exception {
             http.csrf().ignoringAntMatchers("/jeesh/**");
         }
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(RestTerminalProvider.class)
+    public RestTerminalProvider terminalProvider() {
+        return (InputStream in, OutputStream out) -> new ExternalTerminal("Je2sh Terminal", "TERM",
+                                                                          in, out,
+                                                                          StandardCharsets.UTF_8
+                                                                                  .name(),
+                                                                          Terminal.SignalHandler.SIG_DFL);
     }
 
 }
