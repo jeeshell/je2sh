@@ -1,6 +1,7 @@
 # This is JeeSh 
 
 [![Build Status](https://travis-ci.org/jeeshell/je2sh.svg?branch=master)](https://travis-ci.org/jeeshell/je2sh)
+[![CodeFactor](https://www.codefactor.io/repository/github/hartimer/je2sh/badge)](https://www.codefactor.io/repository/github/hartimer/je2sh)
 
 JeeSh stands for "JVM Extensible & Embeddable Shell". It aims at being a reboot of the famous
 [Common Reusable SHell (CRaSH)](https://github.com/crashub/crash).
